@@ -28,6 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("Image uploaded")));
           }
+          if(state is ImageUploadError){
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+          }
         },
         builder: (context, state) => Container(
           margin: const EdgeInsets.all(5),
@@ -83,10 +86,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           ));
                 },
                 child: SizedBox(
-                  height: 300,
+                  height: 200,
+                    width: double.infinity,
                     child: imageFile == null
-                        ? Image.asset('assets/upload_logo.jpg',
-                            fit: BoxFit.contain,color: Colors.white.withOpacity(0.2),colorBlendMode: BlendMode.modulate,)
+                        ? Image.asset('assets/upload_img.png',
+                            fit: BoxFit.contain,color: Colors.white.withOpacity(0.5),colorBlendMode: BlendMode.modulate)
                         : Image.file(imageFile!, fit: BoxFit.contain)),
               ),
               const SizedBox(height: 20),
@@ -142,23 +146,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         imageFile = File(xFile.path);
       });
-    }
-  }
-
-  uploadImage() async {
-    final imageFile = this.imageFile;
-    if (imageFile != null) {
-      String filepath = imageFile.path;
-      String filename = filepath.split('/').last;
-      FormData data = FormData.fromMap({
-        'key': '64667d2ed6f0078e4ba991acb2d7dabc',
-        'image': await MultipartFile.fromFile(filepath, filename: filename),
-        'name': 'abc'
-      });
-
-      var dio = Dio();
-      await dio.post("https://api.imgbb.com/1/upload",
-          data: data, onSendProgress: (int sent, int total) {});
     }
   }
 }

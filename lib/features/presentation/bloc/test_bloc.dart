@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:image_flutter/core/errors/failures.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -26,6 +27,6 @@ class TestBloc extends Bloc<TestEvent, TestState> {
     var imageFile=event.imageFile;
     final response=await uploadImage(Params(image: imageFile));
     emit(ImageUploading());
-    await response.fold((failure) async=> emit(ImageUploadError(message: "Couldn't upload image")), (v) async=> emit(ImageUploadSuccess()));
+    await response.fold((failure) async=> emit(ImageUploadError(message: failure is ServerFailure?"Couldn't upload image":"Image is empty!!")), (v) async=> emit(ImageUploadSuccess()));
   }
 }

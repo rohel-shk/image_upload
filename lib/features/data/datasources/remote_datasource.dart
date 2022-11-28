@@ -30,6 +30,9 @@ class RemoteDataSourceImpl implements RemoteDataSource{
         throw ServerException();
       }
     }
+    else{
+      throw ValidationException();
+    }
   }
 
 }

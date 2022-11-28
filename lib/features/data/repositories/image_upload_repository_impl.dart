@@ -21,6 +21,8 @@ class ImageUploadRepositoryImpl implements ImageUploadRepository{
     }
     on ServerException{
       return Left(ServerFailure());
+    }on ValidationException{
+      return Left(ValidationFailure());
     }
 
   }
